@@ -145,22 +145,22 @@ association ContentSequence between
 end
 
 association FeedAlgorithmAssociation between
-  Socials[*] role socials
+  Socials[0..1] role socials
   FeedAlgorithm[*] role feedAlgorithm
 end
 
 association PostAudienceAssociation between
-  Post[*] role posts
+  Post[0..1] role postss
   PostAudience[*] role postAudience
 end
 
 association PostTypeAssociations between
-  Post[*] role posts
+  Post[0..1] role posts
   PostType[*] role postType
 end
 
 association TypeAssociation between
-  OwnedElement[*] role ownedElements
+  OwnedElement[0..1] role ownedElements
   Type[*] role type
 end
 
