@@ -1,0 +1,166 @@
+model SocialNetwork
+
+-- Classes
+class Owner
+end
+
+class User < Owner
+  operations
+    getPublicProfile(): Set(String)
+    acceptFriends(user: User)
+    sendFriends(user: User)
+    declineFriends(user: User)
+    restrictUser(user: User)
+    deleteUser(user: User)
+
+end
+
+class Socials < Owner
+  attributes
+    feedSort: FeedAlgorithm
+end
+
+class SNsCorp
+end
+
+class OwnedElement
+
+attributes
+type: Type
+shareable: Boolean
+
+end
+
+class Post < Comparable, Content, OwnedElement
+  attributes
+    postType: PostType
+    audience: PostAudience
+    popularityScore: Integer
+
+  operations
+    compareTo(C: Comparable): Integer
+    toString()
+    execute(): String
+
+end
+
+class ImmutablePost < Post
+end
+
+class Comparable
+  operations
+    compareTo(C: Comparable): Integer
+end
+
+class Data < Content
+  attributes
+    data: String
+end
+
+class Content
+end
+
+class Reaction < Content
+  attributes
+    count: Integer
+end
+
+class UpVote < Reaction
+end
+
+class DownVote < Reaction
+end
+
+-- Enums converted to Association Classes
+class FeedAlgorithm
+  attributes
+    feedAlgorithm: FeedAlgorithm
+end
+
+class PostAudience
+  attributes
+    postAudience: PostAudience
+end
+
+class PostType
+  attributes
+    postType: PostType
+end
+
+class Type
+  attributes
+    type: Type
+end
+
+-- Associations
+association Users between
+  Socials[*] role sn
+  User[*] role users
+end
+
+association Feed between
+  Post[*] role accessibleElements
+  User[*] role userPage
+end
+
+association Friends between
+  User[*] role friendly
+  User[*] role friend
+end
+
+association Restrictions between
+  User[*] role restrictor
+  User[*] role restricted
+end
+
+association Reactor between
+  User[*] role reactors
+  Reaction[*] role reactions
+end
+
+aggregation OwnedElements between
+  Owner[1..2] role owner
+  Post[*] role owned ordered
+  Socials[1] role socialNetwork
+end
+
+aggregation Contents between
+  OwnedElement[1] role contentFor
+  Content[1..*] role contents
+end
+
+association SocialNetworks between
+  Socials[*] role sns
+  SNsCorp[*] role serviceProvider
+end
+
+association LinkedPost between
+  Post[0..1] role original
+  ImmutablePost[0..1] role ImmutableCopy
+end
+
+association ContentSequence between
+  Data[0..1] role next
+  Data[0..1] role prev
+end
+
+association FeedAlgorithmAssociation between
+  Socials[*] role socials
+  FeedAlgorithm[*] role feedAlgorithm
+end
+
+association PostAudienceAssociation between
+  Post[*] role posts
+  PostAudience[*] role postAudience
+end
+
+association PostTypeAssociations between
+  Post[*] role posts
+  PostType[*] role postType
+end
+
+association TypeAssociation between
+  OwnedElement[*] role ownedElements
+  Type[*] role type
+end
+
